@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class BaseEntity {
     private String id;
-    private Integer isDeleted;    // 逻辑删除 0-未删除 1-已删除
+    private int isDeleted;    // 逻辑删除 0-未删除 1-已删除
     private String createdBy;     // 创建人
     private String updatedBy;     // 更新人
     private LocalDateTime createdAt; // 创建时间

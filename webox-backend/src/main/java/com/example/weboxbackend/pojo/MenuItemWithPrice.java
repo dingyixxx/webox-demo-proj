@@ -10,6 +10,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MenuItemWithPrice extends MenuItem{
-    private Integer price;       // 单价
-
+    private int price;       // 单价
 }
