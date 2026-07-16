@@ -1,0 +1,74 @@
+[
+  {
+    "id": "item_001",
+    "name": "宫保鸡丁",
+    "description": "经典川菜，鸡肉搭配花生、干辣椒爆炒",
+    "price": 22,
+    "image": "https://example.com/kungpao.jpg",
+    "category": "chinese",
+    "allergens": ["peanut"]
+  },
+  {
+    "id": "item_002",
+    "name": "凯撒沙拉",
+    "description": "新鲜罗马生菜配帕玛森芝士与凯撒酱",
+    "price": 28,
+    "image": "https://example.com/caesar.jpg",
+    "category": "salad",
+    "allergens": ["dairy", "egg"]
+  },
+  {
+    "id": "item_003",
+    "name": "三文鱼刺身定食",
+    "description": "新鲜三文鱼刺身搭配米饭、味噌汤",
+    "price": 45,
+    "image": "https://example.com/sashimi.jpg",
+    "category": "japanese",
+    "allergens": ["fish"]
+  },
+  {
+    "id": "item_004",
+    "name": "番茄意面",
+    "description": "经典意式番茄酱意大利面配新鲜罗勒",
+    "price": 26,
+    "image": "https://example.com/pasta.jpg",
+    "category": "western",
+    "allergens": ["gluten"]
+  },
+  {
+    "id": "item_005",
+    "name": "冬阴功汤",
+    "description": "泰式酸辣虾汤配香茅、南姜、柠檬叶",
+    "price": 32,
+    "image": "https://example.com/tomyum.jpg",
+    "category": "southeast_asian",
+    "allergens": ["shellfish"]
+  },
+  {
+    "id": "item_006",
+    "name": "鸡胸肉藜麦碗",
+    "description": "低脂高蛋白，烤鸡胸配藜麦、牛油果、时蔬",
+    "price": 35,
+    "image": "https://example.com/quinoa.jpg",
+    "category": "salad",
+    "allergens": []
+  },
+  {
+    "id": "item_007",
+    "name": "麻婆豆腐",
+    "description": "四川经典，嫩豆腐配麻辣肉末",
+    "price": 18,
+    "image": "https://example.com/mapo.jpg",
+    "category": "chinese",
+    "allergens": ["soy"]
+  },
+  {
+    "id": "item_008",
+    "name": "韩式拌饭",
+    "description": "石锅拌饭配各式时蔬、煎蛋与辣酱",
+    "price": 30,
+    "image": "https://example.com/bibimbap.jpg",
+    "category": "korean",
+    "allergens": ["egg", "soy"]
+  }
+]
