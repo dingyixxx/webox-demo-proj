@@ -5,9 +5,9 @@ import {
   logout as logoutApi,
   register as registerApi,
 } from '@/api/auth'
-import { TOKEN_KEY } from '@/api/http'
+import { TOKEN_KEY, EMAIL_KEY } from '@/api/http'
 
-export const EMAIL_KEY = 'email'
+export { EMAIL_KEY }
 
 /** 从登录/注册响应中取出 token（兼容 data 为字符串或对象） */
 function extractToken(payload) {

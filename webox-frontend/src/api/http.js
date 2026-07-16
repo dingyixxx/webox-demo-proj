@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { showToast } from 'vant'
+import 'vant/es/toast/style'
 
 export class ApiError extends Error {
   constructor(code, message) {
@@ -9,11 +11,44 @@ export class ApiError extends Error {
 }
 
 export const TOKEN_KEY = 'token'
+export const EMAIL_KEY = 'email'
 
 const http = axios.create({
   baseURL: '/',
   timeout: 15000,
 })
+
+let handling401 = false
+
+/** token 失效：本地退出并跳转登录页 */
+async function handleUnauthorized(message) {
+  if (handling401) return
+  handling401 = true
+
+  try {
+    localStorage.removeItem(TOKEN_KEY)
+    localStorage.removeItem(EMAIL_KEY)
+
+    try {
+      const { useAuthStore } = await import('@/stores/auth')
+      useAuthStore().clearAuth()
+    } catch {
+      // pinia 尚未就绪时忽略
+    }
+
+    showToast(message || '登录已过期，请重新登录')
+
+    if (!window.location.pathname.startsWith('/login')) {
+      window.location.replace('/login')
+    }
+  } finally {
+    handling401 = false
+  }
+}
+
+function isUnauthorized(code) {
+  return Number(code) === 401
+}
 
 // 请求拦截器：自动从 localStorage 读取 token 并放入 headers
 http.interceptors.request.use(
@@ -37,6 +72,12 @@ http.interceptors.response.use(
 
     // 兼容 Result { code, message, data }
     if ('code' in result) {
+      if (isUnauthorized(result.code)) {
+        handleUnauthorized(result.message)
+        return Promise.reject(
+          new ApiError(result.code, result.message || 'token已过期'),
+        )
+      }
       if (result.code !== 200) {
         return Promise.reject(
           new ApiError(result.code, result.message || '请求失败'),
@@ -48,11 +89,15 @@ http.interceptors.response.use(
     return result
   },
   (error) => {
+    const payload = error.response?.data
     const message =
-      error.response?.data?.message ||
-      error.message ||
-      '网络异常，请稍后重试'
-    const code = error.response?.data?.code || error.response?.status || 500
+      payload?.message || error.message || '网络异常，请稍后重试'
+    const code = payload?.code || error.response?.status || 500
+
+    if (isUnauthorized(code) || error.response?.status === 401) {
+      handleUnauthorized(message)
+    }
+
     return Promise.reject(new ApiError(code, message))
   },
 )

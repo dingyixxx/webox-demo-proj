@@ -9,7 +9,8 @@ import java.util.Date;
 public class JwtUtil {
 
     private static final String SECRET = "dingyi20260716";
-    private static final long EXPIRATION = 7 * 24 * 60 * 60 * 1000;
+//    private static final long EXPIRATION = 7 * 24 * 60 * 60 * 1000;
+    private static final long EXPIRATION = 10 * 1000;
 
     private JwtUtil() {}
 

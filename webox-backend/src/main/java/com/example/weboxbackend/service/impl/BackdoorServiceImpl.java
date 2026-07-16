@@ -9,6 +9,7 @@ import com.example.weboxbackend.pojo.DailyMenu;
 import com.example.weboxbackend.pojo.MenuItem;
 import com.example.weboxbackend.pojo.MenuItemHistory;
 import com.example.weboxbackend.service.BackdoorService;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +36,9 @@ public class BackdoorServiceImpl implements BackdoorService {
 
     @Transactional
     @Override
+    @Scheduled(fixedRate = 6 * 60 * 60 * 1000)
     public void syncDailyMenu() {
+        System.out.println("Syncing daily menu...");
         List<MenuItem> menuItems = menuItemMapper.selectList(
                 new LambdaQueryWrapper<MenuItem>().eq(MenuItem::getIsDeleted, 0));
 

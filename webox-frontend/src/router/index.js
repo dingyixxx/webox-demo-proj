@@ -25,6 +25,12 @@ const router = createRouter({
       component: () => import('@/views/MenuView.vue'),
       meta: { title: '菜单' },
     },
+    {
+      path: '/menu/:id',
+      name: 'menu-detail',
+      component: () => import('@/views/MenuDetailView.vue'),
+      meta: { title: '菜品详情' },
+    },
   ],
 })
 
