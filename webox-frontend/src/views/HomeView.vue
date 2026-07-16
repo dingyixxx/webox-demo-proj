@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { showToast } from 'vant'
 import 'vant/es/toast/style'
 import { useRouter } from 'vue-router'

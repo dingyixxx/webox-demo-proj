@@ -114,3 +114,48 @@ AI 问答推荐菜品（详见下方「功能特点」第 15 项）。
 | 10 | 暂无三方接口，不做超时 / 重试 / 服务降级 |
 | 11 | 若有满减优惠券，会涉及「刚好凑单到满减门槛」的回溯算法（如 `18+10+10`、`15+12+11` 凑到 38，满 38 减 14） |
 | 12 | ES 搜索菜品关键字 |
+
+
+# webox-frontend
+
+Vue 3 + Vant 4 移动端 H5 项目。
+
+## 技术栈
+
+- Vue 3 + JavaScript
+- Vite
+- Vant 4（按需自动引入）
+- Vue Router
+- Pinia
+- postcss-px-to-viewport（375 设计稿转 vw）
+
+## 开始使用
+
+```bash
+npm install
+npm run dev
+```
+
+## 常用命令
+
+| 命令 | 说明 |
+| --- | --- |
+| `npm run dev` | 本地开发 |
+| `npm run build` | 生产构建 |
+| `npm run preview` | 预览构建产物 |
+
+## 目录结构
+
+```
+src/
+  views/        # 页面
+  router/       # 路由
+  stores/       # Pinia
+  styles/       # 全局样式
+  components/   # 公共组件
+```
+
+## 说明
+
+- Vant 组件通过 `unplugin-vue-components` + `@vant/auto-import-resolver` 自动按需引入，页面中可直接使用，无需手动 `import`
+- 样式按 375 设计稿书写 px，构建时自动转为 vw；`vant` 自身样式已排除，不做二次转换

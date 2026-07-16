@@ -1,0 +1,3 @@
+### Backdoor - 同步每日菜单
+POST http://localhost:8080/backdoor/sync-daily-menu
+Content-Type: application/json
