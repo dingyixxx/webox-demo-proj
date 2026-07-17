@@ -5,6 +5,7 @@ import { storeToRefs } from 'pinia'
 import { showToast } from 'vant'
 import 'vant/es/toast/style'
 import { ApiError } from '@/api/http'
+import { addCartItem } from '@/api/cart'
 import { getMenuList } from '@/api/menu'
 import { useAuthStore } from '@/stores/auth'
 import {
@@ -20,6 +21,7 @@ const { email, isLoggedIn } = storeToRefs(authStore)
 const loading = ref(false)
 const list = ref([])
 const activeCategory = ref('all')
+const addingId = ref(null)
 
 async function fetchList() {
   loading.value = true
@@ -46,6 +48,36 @@ function goDetail(item) {
   router.push(`/menu/${id}`)
 }
 
+function goCart() {
+  router.push('/cart')
+}
+
+async function handleAddToCart(item) {
+  if (!isLoggedIn.value) {
+    showToast('请先登录')
+    router.push('/login')
+    return
+  }
+
+  const menuItemId = getDishId(item)
+  if (menuItemId == null) {
+    showToast('菜品无效')
+    return
+  }
+
+  addingId.value = menuItemId
+  try {
+    await addCartItem({ menuItemId, quantity: 1 })
+    showToast('已加入购物车')
+  } catch (error) {
+    const message =
+      error instanceof ApiError ? error.message : '加入购物车失败'
+    showToast(message)
+  } finally {
+    addingId.value = null
+  }
+}
+
 async function handleLogout() {
   try {
     await authStore.logout()
@@ -65,7 +97,11 @@ onMounted(fetchList)
 
 <template>
   <div class="menu-page">
-    <van-nav-bar title="今日菜单" fixed placeholder />
+    <van-nav-bar title="今日菜单" fixed placeholder>
+      <template #right>
+        <van-icon name="shopping-cart-o" size="20" @click="goCart" />
+      </template>
+    </van-nav-bar>
 
     <!-- 分类筛选 -->
     <van-tabs
@@ -106,38 +142,60 @@ onMounted(fetchList)
           v-for="item in list"
           :key="getDishId(item)"
           class="dish-card"
-          @click="goDetail(item)"
         >
-          <van-image
-            class="cover"
-            width="100%"
-            height="140"
-            fit="cover"
-            :src="item.image"
-          >
-            <template #error>
-              <div class="img-fallback">暂无图片</div>
-            </template>
-            <template #loading>
-              <div class="img-fallback">加载中</div>
-            </template>
-          </van-image>
+          <div class="cover-wrap" @click="goDetail(item)">
+            <van-image
+              class="cover"
+              width="100%"
+              height="140"
+              fit="cover"
+              :src="item.image"
+            >
+              <template #error>
+                <div class="img-fallback">暂无图片</div>
+              </template>
+              <template #loading>
+                <div class="img-fallback">加载中</div>
+              </template>
+            </van-image>
+          </div>
 
           <div class="info">
-            <div class="row">
+            <div class="row" @click="goDetail(item)">
               <h3 class="name">{{ item.name }}</h3>
               <span class="price">¥{{ formatPrice(item.price) }}</span>
             </div>
-            <div class="tags">
+            <div class="footer">
               <van-tag plain type="primary">
                 {{ getCategoryLabel(item.category) }}
               </van-tag>
+              <van-button
+                size="small"
+                type="primary"
+                round
+                :loading="addingId === getDishId(item)"
+                loading-text="添加中"
+                @click.stop="handleAddToCart(item)"
+              >
+                加入购物车
+              </van-button>
             </div>
           </div>
         </div>
       </div>
 
       <div class="actions">
+        <van-button
+          round
+          block
+          type="primary"
+          plain
+          hairline
+          class="cart-entry"
+          @click="goCart"
+        >
+          查看购物车
+        </van-button>
         <van-button
           v-if="isLoggedIn"
           round
@@ -180,6 +238,9 @@ onMounted(fetchList)
 
 .actions {
   margin: 24px 4px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .state {
@@ -199,6 +260,10 @@ onMounted(fetchList)
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.cover-wrap {
+  cursor: pointer;
 }
 
 .cover {
@@ -226,6 +291,7 @@ onMounted(fetchList)
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
+  cursor: pointer;
 }
 
 .name {
@@ -243,7 +309,11 @@ onMounted(fetchList)
   color: #ee0a24;
 }
 
-.tags {
-  margin-top: 8px;
+.footer {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 </style>

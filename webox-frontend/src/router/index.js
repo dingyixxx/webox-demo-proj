@@ -31,6 +31,12 @@ const router = createRouter({
       component: () => import('@/views/MenuDetailView.vue'),
       meta: { title: '菜品详情' },
     },
+    {
+      path: '/cart',
+      name: 'cart',
+      component: () => import('@/views/CartView.vue'),
+      meta: { title: '购物车' },
+    },
   ],
 })
 

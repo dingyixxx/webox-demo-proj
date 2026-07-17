@@ -110,3 +110,17 @@ CREATE TABLE `t_menu_item_history` (
                                        PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='菜品价格历史表';
 
+-- ========== 7. 购物车表 ==========
+DROP TABLE IF EXISTS `t_cart`;
+CREATE TABLE `t_cart` (
+                          `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+                          `user_id` BIGINT NOT NULL COMMENT '用户ID',
+                          `menu_item_id` BIGINT NOT NULL COMMENT '菜品ID',
+                          `quantity` INT NOT NULL DEFAULT 1 COMMENT '数量',
+                          `is_deleted` INT DEFAULT 0 COMMENT '逻辑删除 0-未删除 1-已删除',
+                          `created_by` VARCHAR(64) COMMENT '创建人',
+                          `updated_by` VARCHAR(64) COMMENT '更新人',
+                          `created_at` DATETIME COMMENT '创建时间',
+                          `updated_at` DATETIME COMMENT '更新时间',
+                          PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='购物车表';

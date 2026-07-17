@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { showToast } from 'vant'
 import 'vant/es/toast/style'
@@ -14,6 +14,13 @@ const form = reactive({
   email: '',
   password: '',
 })
+
+function resetForm() {
+  form.email = ''
+  form.password = ''
+}
+
+onMounted(resetForm)
 
 const emailRules = [
   { required: true, message: '请输入邮箱' },
@@ -66,11 +73,29 @@ function goRegister() {
       <p class="subtitle">使用邮箱登录后点餐</p>
     </div>
 
-    <van-form @submit="onSubmit">
+    <van-form autocomplete="off" @submit="onSubmit">
       <van-cell-group inset>
-        <van-field v-model="form.email" name="email" type="email" label="邮箱" placeholder="请输入邮箱" :rules="emailRules" />
-        <van-field v-model="form.password" name="password" type="password" label="密码" placeholder="请输入密码"
-          :rules="passwordRules" />
+        <van-field
+          v-model="form.email"
+          name="webox_login_email"
+          type="text"
+          label="邮箱"
+          placeholder="请输入邮箱"
+          autocomplete="off"
+          autocapitalize="off"
+          autocorrect="off"
+          spellcheck="false"
+          :rules="emailRules"
+        />
+        <van-field
+          v-model="form.password"
+          name="webox_login_password"
+          type="password"
+          label="密码"
+          placeholder="请输入密码"
+          autocomplete="new-password"
+          :rules="passwordRules"
+        />
       </van-cell-group>
 
       <div class="actions">
