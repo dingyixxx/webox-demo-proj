@@ -101,6 +101,10 @@ function goPreferences() {
   router.push('/preferences')
 }
 
+function goAiRecommend() {
+  router.push('/ai-recommend')
+}
+
 async function handleAddToCart(item) {
   if (!isLoggedIn.value) {
     showToast('请先登录')
@@ -316,6 +320,15 @@ onMounted(async () => {
         </van-button>
       </div>
     </div>
+
+    <!-- AI 对话入口：底部输入条 / 气泡 -->
+    <div class="ai-entry" @click="goAiRecommend">
+      <div class="ai-bubble">
+        <span class="ai-avatar">AI</span>
+        <span class="ai-hint">想吃什么？描述口味，AI 帮你推荐…</span>
+        <van-icon name="arrow" class="ai-arrow" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -323,7 +336,55 @@ onMounted(async () => {
 .menu-page {
   min-height: 100vh;
   background: #f7f8fa;
-  padding-bottom: 24px;
+  padding-bottom: calc(72px + env(safe-area-inset-bottom));
+}
+
+.ai-entry {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  z-index: 100;
+}
+
+.ai-bubble {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 4px 16px rgba(25, 137, 250, 0.18);
+  border: 1px solid rgba(25, 137, 250, 0.12);
+  cursor: pointer;
+}
+
+.ai-avatar {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1989fa, #07c160);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 32px;
+  text-align: center;
+}
+
+.ai-hint {
+  flex: 1;
+  font-size: 14px;
+  color: #969799;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ai-arrow {
+  flex-shrink: 0;
+  color: #c8c9cc;
+  font-size: 16px;
 }
 
 .content {

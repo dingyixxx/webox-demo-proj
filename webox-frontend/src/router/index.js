@@ -67,6 +67,12 @@ const router = createRouter({
       component: () => import('@/views/PreferencesView.vue'),
       meta: { title: '偏好设置' },
     },
+    {
+      path: '/ai-recommend',
+      name: 'ai-recommend',
+      component: () => import('@/views/AiRecommendView.vue'),
+      meta: { title: 'AI 智能推荐' },
+    },
   ],
 })
 

@@ -23,6 +23,7 @@
 | `/orders` | 用户历史订单列表页 |
 | `/orders/:id` | 单个订单详情页 |
 | `/preferences` | 用户偏好设置页（加分项 A） |
+| `/ai-recommend` | AI 智能推荐页（自然语言问答推荐，加分项 B） |
 
 ---
 
@@ -71,7 +72,11 @@
 
 ### 6. AI 推荐模块（AI Recommendation）— 加分项 B
 
-AI 问答推荐菜品（详见下方「功能特点」）。
+| 方法 | 路径 | 功能描述 | 请求体示例 |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/recommendations` | AI 智能推荐菜品（需登录；自动排除用户过敏原；结合偏好与自然语言返回 3-5 道菜及推荐理由） | `{ "prompt": "我想吃点清淡的中餐" }` |
+
+响应 `data` 为数组，元素字段：`menuItemId`、`name`、`description`、`image`、`category`、`allergens`、`price`（元×100）、`reason`。
 
 ---
 
@@ -183,9 +188,13 @@ src/
 
 <img src="screenshots/login.png" alt="登录页" width="280" />
 
-### 今日菜单
+### 今日菜单（含 AI 对话入口）
 
-<img src="screenshots/menu.png" alt="菜单列表页" width="280" />
+<img src="screenshots/menus.png" alt="今日菜单与底部 AI 对话入口" width="280" />
+
+### AI 智能推荐
+
+<img src="screenshots/ai-recommendation.png" alt="AI 智能推荐页" width="280" />
 
 ### 购物车
 
@@ -207,9 +216,7 @@ src/
 
 <img src="screenshots/preference-setting.png" alt="用户偏好设置页" width="280" />
 
-### 过敏原提示（菜单列表）
 
-<img src="screenshots/allergen1.png" alt="菜单列表过敏原提示" width="280" />
 
 ### 过敏原提示（菜品详情）
 
