@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @TableName("t_order_item")
 public class OrderItem extends BaseEntity{
-    private Long orderId;     // 订单用户
+    private Long orderId;     // 订单 ID
     private Long userId;          // 下单用户
     private Long menuItemId;  // 菜品 ID
     private String name;        // 菜品名称（冗余快照）

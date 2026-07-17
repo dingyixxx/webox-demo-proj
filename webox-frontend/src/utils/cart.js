@@ -9,11 +9,11 @@ export function normalizeCartItems(data) {
 }
 
 export function getCartItemMenuId(item) {
-  return item?.menuItemId ?? item?.menu_item_id ?? item?.menuId
+  return item?.menuItemId
 }
 
 export function getCartLineId(item) {
-  return item?.id ?? item?.cartItemId ?? item?.cart_item_id
+  return item?.id
 }
 
 /**

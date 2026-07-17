@@ -17,8 +17,6 @@ public class Order extends BaseEntity{
     private Long userId;          // 下单用户
     private String email;       // 登录邮箱
     private String name;        // 用户姓名
-    @TableField(exist = false)
-    private List<OrderItem> items;  // 订单菜品列表
     private Integer totalAmount;     // 订单总额
     private LocalDate deliveryDate;    // 配送日期 "YYYY-MM-DD"
     private String mealPeriod;      // "lunch" | "dinner"

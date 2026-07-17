@@ -5,14 +5,10 @@ export function getCart() {
   return http.get('/api/cart')
 }
 
-/**
- * POST /api/cart/items
- * body: { menuItemId, quantity }（同时兼容 readme 的 menu_item_id）
- */
+/** POST /api/cart/items  body: { menuItemId, quantity } */
 export function addCartItem({ menuItemId, quantity = 1 }) {
   return http.post('/api/cart/items', {
     menuItemId,
-    menu_item_id: menuItemId,
     quantity,
   })
 }

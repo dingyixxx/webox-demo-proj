@@ -52,6 +52,10 @@ function goCart() {
   router.push('/cart')
 }
 
+function goOrders() {
+  router.push('/orders')
+}
+
 async function handleAddToCart(item) {
   if (!isLoggedIn.value) {
     showToast('请先登录')
@@ -128,6 +132,7 @@ onMounted(fetchList)
           title="当前用户"
           :value="email || '已登录'"
         />
+        <van-cell title="我的订单" is-link @click="goOrders" />
       </van-cell-group>
 
       <van-loading v-if="loading" class="state" vertical>加载中...</van-loading>

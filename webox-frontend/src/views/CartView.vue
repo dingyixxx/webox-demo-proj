@@ -206,7 +206,7 @@ onMounted(fetchCart)
       label="合计："
       button-text="去结算"
       tip="左右滑动可删除菜品"
-      @submit="showToast('结算功能后续实现')"
+      @submit="router.push('/checkout')"
     />
   </div>
 </template>
