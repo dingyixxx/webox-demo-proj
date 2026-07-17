@@ -1,20 +1,46 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
 import { showToast } from 'vant'
 import 'vant/es/toast/style'
 import { ApiError } from '@/api/http'
 import { getMenuDetail } from '@/api/menu'
+import { useAuthStore } from '@/stores/auth'
+import { usePreferencesStore } from '@/stores/preferences'
 import {
   formatPrice,
   getAllergenLabel,
   getCategoryLabel,
 } from '@/utils/menu'
+import {
+  getMatchedUserAllergens,
+  hasAllergenConflict,
+  isDishAllergenMatched,
+} from '@/utils/preferences'
 
 const route = useRoute()
 const router = useRouter()
+const authStore = useAuthStore()
+const preferencesStore = usePreferencesStore()
+const { preferences } = storeToRefs(preferencesStore)
 const loading = ref(false)
 const detail = ref(null)
+
+const allergenRisk = computed(() =>
+  hasAllergenConflict(detail.value?.allergens, preferences.value.allergens),
+)
+
+const matchedCodes = computed(() =>
+  getMatchedUserAllergens(
+    detail.value?.allergens,
+    preferences.value.allergens,
+  ),
+)
+
+const matchedAllergenLabels = computed(() =>
+  matchedCodes.value.map(getAllergenLabel),
+)
 
 async function fetchDetail() {
   loading.value = true
@@ -31,6 +57,15 @@ async function fetchDetail() {
   }
 }
 
+async function ensurePreferences() {
+  if (!authStore.isLoggedIn) return
+  try {
+    await preferencesStore.fetchPreferences()
+  } catch {
+    // ignore
+  }
+}
+
 function goBack() {
   if (window.history.length > 1) {
     router.back()
@@ -39,7 +74,10 @@ function goBack() {
   }
 }
 
-onMounted(fetchDetail)
+onMounted(async () => {
+  await ensurePreferences()
+  await fetchDetail()
+})
 </script>
 
 <template>
@@ -64,17 +102,19 @@ onMounted(fetchDetail)
     </van-empty>
 
     <template v-else>
-      <van-image
-        class="hero"
-        width="100%"
-        height="220"
-        fit="cover"
-        :src="detail.image"
-      >
-        <template #error>
-          <div class="img-fallback">暂无图片</div>
-        </template>
-      </van-image>
+      <div class="hero-wrap">
+        <van-image
+          class="hero"
+          width="100%"
+          height="220"
+          fit="cover"
+          :src="detail.image"
+        >
+          <template #error>
+            <div class="img-fallback">暂无图片</div>
+          </template>
+        </van-image>
+      </div>
 
       <div class="panel">
         <div class="title-row">
@@ -100,21 +140,44 @@ onMounted(fetchDetail)
           </p>
         </div>
 
-        <div class="section">
+        <div
+          class="section allergen-section"
+          :class="{ 'allergen-section--risk': allergenRisk }"
+        >
           <h2 class="section-title">过敏原信息</h2>
-          <div
-            v-if="detail.allergens && detail.allergens.length"
-            class="allergens"
-          >
-            <van-tag
-              v-for="code in detail.allergens"
-              :key="code"
-              type="warning"
-              plain
-            >
-              {{ getAllergenLabel(code) }}
-            </van-tag>
-          </div>
+          <template v-if="detail.allergens && detail.allergens.length">
+            <p v-if="allergenRisk" class="allergen-tip">
+              <svg
+                class="allergen-tip-icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  fill="currentColor"
+                  d="M12 2.5c.4 0 .8.2 1 .6l9.2 16.1c.4.7-.1 1.6-.9 1.6H2.7c-.8 0-1.3-.9-.9-1.6L11 3.1c.2-.4.6-.6 1-.6zm0 5.2c-.6 0-1 .4-1 1v5.2c0 .6.4 1 1 1s1-.4 1-1V8.7c0-.6-.4-1-1-1zm0 9.2c.7 0 1.2-.5 1.2-1.2S12.7 14.5 12 14.5s-1.2.5-1.2 1.2.5 1.2 1.2 1.2z"
+                />
+              </svg>
+              含你设置的过敏原：{{ matchedAllergenLabels.join('、') }}，请谨慎选择。红色标签为与你偏好匹配的项目。
+            </p>
+            <p v-else class="allergen-tip allergen-tip--muted">
+              以下为菜品标注的过敏原；若与你的偏好重合会以红色标出。
+            </p>
+            <div class="allergens">
+              <span
+                v-for="code in detail.allergens"
+                :key="code"
+                class="allergen-chip"
+                :class="{
+                  'allergen-chip--match': isDishAllergenMatched(
+                    code,
+                    preferences.allergens,
+                  ),
+                }"
+              >
+                {{ getAllergenLabel(code) }}
+              </span>
+            </div>
+          </template>
           <p v-else class="desc muted">未标注过敏原</p>
         </div>
       </div>
@@ -133,6 +196,10 @@ onMounted(fetchDetail)
   display: flex;
   justify-content: center;
   padding: 64px 0;
+}
+
+.hero-wrap {
+  position: relative;
 }
 
 .hero {
@@ -163,6 +230,7 @@ onMounted(fetchDetail)
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
+  margin-top: 12px;
   padding: 16px;
   background: #fff;
   border-radius: 12px;
@@ -186,6 +254,9 @@ onMounted(fetchDetail)
 .meta {
   margin-top: 12px;
   padding: 0 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .block {
@@ -217,9 +288,56 @@ onMounted(fetchDetail)
   color: #969799;
 }
 
+.allergen-section--risk {
+  background: #fff1f0;
+}
+
+.allergen-tip {
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #ee0a24;
+  font-weight: 500;
+}
+
+.allergen-tip-icon {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  margin-right: 4px;
+  vertical-align: -2px;
+  flex-shrink: 0;
+}
+
+.allergen-tip--muted {
+  color: #969799;
+  font-weight: 400;
+}
+
 .allergens {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+.allergen-chip {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #646566;
+  background: #f2f3f5;
+}
+
+.allergen-section--risk .allergen-chip {
+  background: #fff;
+}
+
+.allergen-section--risk .allergen-chip--match,
+.allergen-chip--match {
+  color: #fff;
+  background: #ff1744;
+  font-weight: 700;
 }
 </style>

@@ -6,7 +6,11 @@
     "price": 22,
     "image": "https://example.com/kungpao.jpg",
     "category": "chinese",
-    "allergens": ["peanut"]
+    "allergens": ["peanut"],
+    "flavorSpicinessLevel": 90,
+    "flavorTasteLevel": 90,
+    "flavorProteinLevel": 50,
+    "flavorFatLevel": 50
   },
   {
     "id": "item_002",
@@ -15,7 +19,11 @@
     "price": 28,
     "image": "https://example.com/caesar.jpg",
     "category": "salad",
-    "allergens": ["dairy", "egg"]
+    "allergens": ["dairy", "egg"],
+    "flavorSpicinessLevel": 10,
+    "flavorTasteLevel": 10,
+    "flavorProteinLevel": 10,
+    "flavorFatLevel": 50
   },
   {
     "id": "item_003",
@@ -24,7 +32,11 @@
     "price": 45,
     "image": "https://example.com/sashimi.jpg",
     "category": "japanese",
-    "allergens": ["fish"]
+    "allergens": ["fish"],
+    "flavorSpicinessLevel": 10,
+    "flavorTasteLevel": 50,
+    "flavorProteinLevel": 90,
+    "flavorFatLevel": 50
   },
   {
     "id": "item_004",
@@ -33,7 +45,11 @@
     "price": 26,
     "image": "https://example.com/pasta.jpg",
     "category": "western",
-    "allergens": ["gluten"]
+    "allergens": ["gluten"],
+    "flavorSpicinessLevel": 10,
+    "flavorTasteLevel": 50,
+    "flavorProteinLevel": 10,
+    "flavorFatLevel": 10
   },
   {
     "id": "item_005",
@@ -42,7 +58,11 @@
     "price": 32,
     "image": "https://example.com/tomyum.jpg",
     "category": "southeast_asian",
-    "allergens": ["shellfish"]
+    "allergens": ["shellfish"],
+    "flavorSpicinessLevel": 90,
+    "flavorTasteLevel": 90,
+    "flavorProteinLevel": 50,
+    "flavorFatLevel": 10
   },
   {
     "id": "item_006",
@@ -51,7 +71,11 @@
     "price": 35,
     "image": "https://example.com/quinoa.jpg",
     "category": "salad",
-    "allergens": []
+    "allergens": [],
+    "flavorSpicinessLevel": 10,
+    "flavorTasteLevel": 10,
+    "flavorProteinLevel": 90,
+    "flavorFatLevel": 10
   },
   {
     "id": "item_007",
@@ -60,7 +84,11 @@
     "price": 18,
     "image": "https://example.com/mapo.jpg",
     "category": "chinese",
-    "allergens": ["soy"]
+    "allergens": ["soy"],
+    "flavorSpicinessLevel": 90,
+    "flavorTasteLevel": 90,
+    "flavorProteinLevel": 50,
+    "flavorFatLevel": 50
   },
   {
     "id": "item_008",
@@ -69,6 +97,10 @@
     "price": 30,
     "image": "https://example.com/bibimbap.jpg",
     "category": "korean",
-    "allergens": ["egg", "soy"]
+    "allergens": ["egg", "soy"],
+    "flavorSpicinessLevel": 50,
+    "flavorTasteLevel": 50,
+    "flavorProteinLevel": 50,
+    "flavorFatLevel": 50
   }
 ]

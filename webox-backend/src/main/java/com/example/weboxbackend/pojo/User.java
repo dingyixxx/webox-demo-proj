@@ -19,4 +19,7 @@ public class User extends DietaryInfo{
     private String name;        // 用户姓名
     @TableField(typeHandler = JacksonTypeHandler.class)
     private List<String> categories;    // 偏好分类（多选, 如 ["chinese", "japanese"]）
+    private int preferredMinPrice;      // 偏好起始价格（分）
+    private int preferredMaxPrice;      // 偏好终止价格（分）
+
 }

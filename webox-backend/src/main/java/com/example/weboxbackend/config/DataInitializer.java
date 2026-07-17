@@ -45,6 +45,7 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         initDefaultUser();
         initMenuItems();
+        backfillFlavorScoresIfNeeded();
     }
 
     private void initDefaultUser() {
@@ -79,47 +80,110 @@ public class DataInitializer implements CommandLineRunner {
             return;
         }
 
-        ClassPathResource resource = new ClassPathResource("sample-menu-items.json");
-        try (InputStream is = resource.getInputStream()) {
-            List<Map<String, Object>> items = objectMapper.readValue(is, new TypeReference<List<Map<String, Object>>>() {});
+        List<Map<String, Object>> items = loadSampleMenuItems();
+        for (Map<String, Object> item : items) {
+            MenuItem menuItem = buildMenuItemFromSample(item);
+            menuItemMapper.insert(menuItem);
 
-            for (Map<String, Object> item : items) {
-                MenuItem menuItem = new MenuItem();
-                menuItem.setName((String) item.get("name"));
-                menuItem.setDescription((String) item.get("description"));
-                menuItem.setImage((String) item.get("image"));
-                menuItem.setCategory((String) item.get("category"));
+            Number priceNum = (Number) item.get("price");
+            int priceExpanded = priceNum.intValue() * 100;
 
-                List<String> allergens = objectMapper.convertValue(
-                        item.get("allergens"), new TypeReference<List<String>>() {});
-                menuItem.setAllergens(allergens);
+            MenuItemHistory history = new MenuItemHistory();
+            history.setMenuItemId(menuItem.getId());
+            history.setPrice(priceExpanded);
+            history.setValidFromDate(LocalDate.of(1700, 1, 1));
+            history.setIsDeleted(0);
+            history.setCreatedBy("system");
+            history.setUpdatedBy("system");
+            history.setCreatedAt(LocalDateTime.now());
+            history.setUpdatedAt(LocalDateTime.now());
 
-                menuItem.setIsDeleted(0);
-                menuItem.setCreatedBy("system");
-                menuItem.setUpdatedBy("system");
-                menuItem.setCreatedAt(LocalDateTime.now());
-                menuItem.setUpdatedAt(LocalDateTime.now());
+            menuItemHistoryMapper.insert(history);
 
-                menuItemMapper.insert(menuItem);
-
-                Number priceNum = (Number) item.get("price");
-                int priceExpanded = priceNum.intValue() * 100;
-
-                MenuItemHistory history = new MenuItemHistory();
-                history.setMenuItemId(menuItem.getId());
-                history.setPrice(priceExpanded);
-                history.setValidFromDate(LocalDate.of(1700, 1, 1));
-                history.setIsDeleted(0);
-                history.setCreatedBy("system");
-                history.setUpdatedBy("system");
-                history.setCreatedAt(LocalDateTime.now());
-                history.setUpdatedAt(LocalDateTime.now());
-
-                menuItemHistoryMapper.insert(history);
-
-                log.info("菜品[{}]及价格历史初始化成功, price={}", menuItem.getName(), priceExpanded);
-            }
+            log.info("菜品[{}]及价格历史初始化成功, price={}", menuItem.getName(), priceExpanded);
         }
         log.info("菜品数据初始化完成");
+    }
+
+    /**
+     * 已有菜品若风味分仍为默认 0，则按样例数据按菜名回填，便于偏好排序生效。
+     * 已打过分（任一风味字段非 0）的菜品不会被覆盖。
+     */
+    private void backfillFlavorScoresIfNeeded() throws Exception {
+        List<MenuItem> existing = menuItemMapper.selectList(
+                new LambdaQueryWrapper<MenuItem>().eq(MenuItem::getIsDeleted, 0));
+        if (existing == null || existing.isEmpty()) {
+            return;
+        }
+
+        boolean allZero = existing.stream().allMatch(item ->
+                item.getFlavorSpicinessLevel() == 0
+                        && item.getFlavorTasteLevel() == 0
+                        && item.getFlavorProteinLevel() == 0
+                        && item.getFlavorFatLevel() == 0);
+        if (!allZero) {
+            log.info("菜品风味分已存在，跳过回填");
+            return;
+        }
+
+        Map<String, Map<String, Object>> sampleByName = new java.util.HashMap<>();
+        for (Map<String, Object> sample : loadSampleMenuItems()) {
+            sampleByName.put((String) sample.get("name"), sample);
+        }
+
+        int updated = 0;
+        for (MenuItem item : existing) {
+            Map<String, Object> sample = sampleByName.get(item.getName());
+            if (sample == null) {
+                continue;
+            }
+            applyFlavorFromSample(item, sample);
+            item.setUpdatedAt(LocalDateTime.now());
+            item.setUpdatedBy("system");
+            menuItemMapper.updateById(item);
+            updated++;
+        }
+        log.info("已回填 {} 条菜品风味分", updated);
+    }
+
+    private List<Map<String, Object>> loadSampleMenuItems() throws Exception {
+        ClassPathResource resource = new ClassPathResource("sample-menu-items.json");
+        try (InputStream is = resource.getInputStream()) {
+            return objectMapper.readValue(is, new TypeReference<List<Map<String, Object>>>() {});
+        }
+    }
+
+    private MenuItem buildMenuItemFromSample(Map<String, Object> item) {
+        MenuItem menuItem = new MenuItem();
+        menuItem.setName((String) item.get("name"));
+        menuItem.setDescription((String) item.get("description"));
+        menuItem.setImage((String) item.get("image"));
+        menuItem.setCategory((String) item.get("category"));
+
+        List<String> allergens = objectMapper.convertValue(
+                item.get("allergens"), new TypeReference<List<String>>() {});
+        menuItem.setAllergens(allergens);
+        applyFlavorFromSample(menuItem, item);
+
+        menuItem.setIsDeleted(0);
+        menuItem.setCreatedBy("system");
+        menuItem.setUpdatedBy("system");
+        menuItem.setCreatedAt(LocalDateTime.now());
+        menuItem.setUpdatedAt(LocalDateTime.now());
+        return menuItem;
+    }
+
+    private void applyFlavorFromSample(MenuItem menuItem, Map<String, Object> sample) {
+        menuItem.setFlavorSpicinessLevel(intOrDefault(sample.get("flavorSpicinessLevel"), 0));
+        menuItem.setFlavorTasteLevel(intOrDefault(sample.get("flavorTasteLevel"), 0));
+        menuItem.setFlavorProteinLevel(intOrDefault(sample.get("flavorProteinLevel"), 0));
+        menuItem.setFlavorFatLevel(intOrDefault(sample.get("flavorFatLevel"), 0));
+    }
+
+    private int intOrDefault(Object value, int defaultValue) {
+        if (value instanceof Number) {
+            return ((Number) value).intValue();
+        }
+        return defaultValue;
     }
 }

@@ -16,8 +16,17 @@ public interface DailyMenuMapper extends BaseMapper<DailyMenu> {
     @Delete("DELETE FROM t_daily_menu WHERE today = #{today} AND is_deleted = 0")
     int deleteByToday(@Param("today") LocalDate today);
 
+    @Results(id = "menuVoMap", value = {
+            @Result(column = "allergens", property = "allergens", typeHandler = JacksonTypeHandler.class),
+            @Result(column = "flavor_spiciness_level", property = "flavorSpicinessLevel"),
+            @Result(column = "flavor_taste_level", property = "flavorTasteLevel"),
+            @Result(column = "flavor_protein_level", property = "flavorProteinLevel"),
+            @Result(column = "flavor_fat_level", property = "flavorFatLevel")
+    })
     @Select("<script>SELECT dm.id, dm.today, dm.menu_item_id AS menuItemId, dm.price, " +
-            "mi.name, mi.description, mi.image, mi.category, mi.allergens " +
+            "mi.name, mi.description, mi.image, mi.category, mi.allergens, " +
+            "mi.flavor_spiciness_level, mi.flavor_taste_level, " +
+            "mi.flavor_protein_level, mi.flavor_fat_level " +
             "FROM t_daily_menu dm " +
             "JOIN t_menu_item mi ON dm.menu_item_id = mi.id AND mi.is_deleted = 0 " +
             "WHERE dm.today = #{today} AND dm.is_deleted = 0 " +
@@ -27,11 +36,11 @@ public interface DailyMenuMapper extends BaseMapper<DailyMenu> {
             "ORDER BY dm.id</script>")
     List<MenuVO> selectTodayMenu(@Param("today") LocalDate today, @Param("category") String category);
 
-    @Results({
-            @Result(column = "allergens", property = "allergens", typeHandler = JacksonTypeHandler.class)
-    })
+    @ResultMap("menuVoMap")
     @Select("SELECT dm.id, dm.today, dm.menu_item_id AS menuItemId, dm.price, " +
-            "mi.name, mi.description, mi.image, mi.category, mi.allergens " +
+            "mi.name, mi.description, mi.image, mi.category, mi.allergens, " +
+            "mi.flavor_spiciness_level, mi.flavor_taste_level, " +
+            "mi.flavor_protein_level, mi.flavor_fat_level " +
             "FROM t_daily_menu dm " +
             "JOIN t_menu_item mi ON dm.menu_item_id = mi.id AND mi.is_deleted = 0 " +
             "WHERE dm.today = #{today} AND dm.menu_item_id = #{menuItemId} AND dm.is_deleted = 0")

@@ -28,5 +28,18 @@ public class DailyMenu extends BaseEntity{
     @TableField(exist = false)
     private String category;    // 所属分类（单选, 如"chinese"或"japanese"）
 
+    /** 以下风味字段来自 t_menu_item 联表，非 t_daily_menu 列 */
+    @TableField(exist = false)
+    private Integer flavorSpicinessLevel;
+
+    @TableField(exist = false)
+    private Integer flavorTasteLevel;
+
+    @TableField(exist = false)
+    private Integer flavorProteinLevel;
+
+    @TableField(exist = false)
+    private Integer flavorFatLevel;
+
     private int price;       // 单价
 }

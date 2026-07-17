@@ -1,0 +1,51 @@
+=== DeepSeek 菜品评分结果 ===
+生成时间：2026-07-17T13:39:48.739676300
+
+【宫保鸡丁】
+DeepSeek 原始回复：
+{"id":"48e70665-757c-453f-a6b7-20551e3a3a67","object":"chat.completion","created":1784266788,"model":"deepseek-v4-flash","choices":[{"index":0,"message":{"role":"assistant","content":"{\"spicinessLevel\": 90, \"tasteLevel\": 90, \"proteinLevel\": 50, \"fatLevel\": 50}"},"logprobs":null,"finish_reason":"stop"}],"usage":{"prompt_tokens":207,"completion_tokens":31,"total_tokens":238,"prompt_tokens_details":{"cached_tokens":0},"prompt_cache_hit_tokens":0,"prompt_cache_miss_tokens":207},"system_fingerprint":"fp_8b330d02d0_prod0820_fp8_kvcache_20260402"}
+
+最终评分：辣度=90, 口味=90, 蛋白=50, 脂肪=50
+
+【凯撒沙拉】
+DeepSeek 原始回复：
+{"id":"94c76cfc-a1bf-42cc-b9cd-343bd4932c70","object":"chat.completion","created":1784266790,"model":"deepseek-v4-flash","choices":[{"index":0,"message":{"role":"assistant","content":"{\"spicinessLevel\": 10, \"tasteLevel\": 50, \"proteinLevel\": 50, \"fatLevel\": 50}"},"logprobs":null,"finish_reason":"stop"}],"usage":{"prompt_tokens":207,"completion_tokens":31,"total_tokens":238,"prompt_tokens_details":{"cached_tokens":0},"prompt_cache_hit_tokens":0,"prompt_cache_miss_tokens":207},"system_fingerprint":"fp_8b330d02d0_prod0820_fp8_kvcache_20260402"}
+
+最终评分：辣度=10, 口味=50, 蛋白=50, 脂肪=50
+
+【三文鱼刺身定食】
+DeepSeek 原始回复：
+{"id":"4bed644b-9b1a-465b-a3f3-2ea608307902","object":"chat.completion","created":1784266792,"model":"deepseek-v4-flash","choices":[{"index":0,"message":{"role":"assistant","content":"{\"spicinessLevel\": 10, \"tasteLevel\": 10, \"proteinLevel\": 90, \"fatLevel\": 50}"},"logprobs":null,"finish_reason":"stop"}],"usage":{"prompt_tokens":211,"completion_tokens":31,"total_tokens":242,"prompt_tokens_details":{"cached_tokens":0},"prompt_cache_hit_tokens":0,"prompt_cache_miss_tokens":211},"system_fingerprint":"fp_8b330d02d0_prod0820_fp8_kvcache_20260402"}
+
+最终评分：辣度=10, 口味=10, 蛋白=90, 脂肪=50
+
+【番茄意面】
+DeepSeek 原始回复：
+{"id":"1b23e4ee-7c26-4351-a3f7-1c0508e21ba7","object":"chat.completion","created":1784266794,"model":"deepseek-v4-flash","choices":[{"index":0,"message":{"role":"assistant","content":"{\"spicinessLevel\": 10, \"tasteLevel\": 50, \"proteinLevel\": 10, \"fatLevel\": 50}"},"logprobs":null,"finish_reason":"stop"}],"usage":{"prompt_tokens":205,"completion_tokens":31,"total_tokens":236,"prompt_tokens_details":{"cached_tokens":0},"prompt_cache_hit_tokens":0,"prompt_cache_miss_tokens":205},"system_fingerprint":"fp_8b330d02d0_prod0820_fp8_kvcache_20260402"}
+
+最终评分：辣度=10, 口味=50, 蛋白=10, 脂肪=50
+
+【冬阴功汤】
+DeepSeek 原始回复：
+{"id":"ad47e62b-a0fa-4805-ad15-567a2413c671","object":"chat.completion","created":1784266796,"model":"deepseek-v4-flash","choices":[{"index":0,"message":{"role":"assistant","content":"{\"spicinessLevel\": 50, \"tasteLevel\": 90, \"proteinLevel\": 10, \"fatLevel\": 10}"},"logprobs":null,"finish_reason":"stop"}],"usage":{"prompt_tokens":210,"completion_tokens":31,"total_tokens":241,"prompt_tokens_details":{"cached_tokens":0},"prompt_cache_hit_tokens":0,"prompt_cache_miss_tokens":210},"system_fingerprint":"fp_8b330d02d0_prod0820_fp8_kvcache_20260402"}
+
+最终评分：辣度=50, 口味=90, 蛋白=10, 脂肪=10
+
+【鸡胸肉藜麦碗】
+DeepSeek 原始回复：
+{"id":"82c7939e-4c76-4a72-9c00-6e9d045a6d5d","object":"chat.completion","created":1784266798,"model":"deepseek-v4-flash","choices":[{"index":0,"message":{"role":"assistant","content":"{\"spicinessLevel\": 10, \"tasteLevel\": 10, \"proteinLevel\": 90, \"fatLevel\": 50}"},"logprobs":null,"finish_reason":"stop"}],"usage":{"prompt_tokens":217,"completion_tokens":31,"total_tokens":248,"prompt_tokens_details":{"cached_tokens":0},"prompt_cache_hit_tokens":0,"prompt_cache_miss_tokens":217},"system_fingerprint":"fp_8b330d02d0_prod0820_fp8_kvcache_20260402"}
+
+最终评分：辣度=10, 口味=10, 蛋白=90, 脂肪=50
+
+【麻婆豆腐】
+DeepSeek 原始回复：
+{"id":"f78d3dfe-ff70-4fd6-9737-48d14f39cae9","object":"chat.completion","created":1784266799,"model":"deepseek-v4-flash","choices":[{"index":0,"message":{"role":"assistant","content":"{\"spicinessLevel\": 90, \"tasteLevel\": 90, \"proteinLevel\": 50, \"fatLevel\": 50}"},"logprobs":null,"finish_reason":"stop"}],"usage":{"prompt_tokens":203,"completion_tokens":31,"total_tokens":234,"prompt_tokens_details":{"cached_tokens":0},"prompt_cache_hit_tokens":0,"prompt_cache_miss_tokens":203},"system_fingerprint":"fp_8b330d02d0_prod0820_fp8_kvcache_20260402"}
+
+最终评分：辣度=90, 口味=90, 蛋白=50, 脂肪=50
+
+【韩式拌饭】
+DeepSeek 原始回复：
+{"id":"399db8a3-a654-4c67-aa5c-9542ea3fa76e","object":"chat.completion","created":1784266801,"model":"deepseek-v4-flash","choices":[{"index":0,"message":{"role":"assistant","content":"{\"spicinessLevel\": 50, \"tasteLevel\": 50, \"proteinLevel\": 50, \"fatLevel\": 50}"},"logprobs":null,"finish_reason":"stop"}],"usage":{"prompt_tokens":209,"completion_tokens":31,"total_tokens":240,"prompt_tokens_details":{"cached_tokens":0},"prompt_cache_hit_tokens":0,"prompt_cache_miss_tokens":209},"system_fingerprint":"fp_8b330d02d0_prod0820_fp8_kvcache_20260402"}
+
+最终评分：辣度=50, 口味=50, 蛋白=50, 脂肪=50
+

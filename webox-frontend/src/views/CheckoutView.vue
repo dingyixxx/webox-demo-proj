@@ -8,6 +8,7 @@ import { getCart } from '@/api/cart'
 import { getMenuList } from '@/api/menu'
 import { createOrder, getOrders } from '@/api/order'
 import { useAuthStore } from '@/stores/auth'
+import { usePreferencesStore } from '@/stores/preferences'
 import { formatPrice } from '@/utils/menu'
 import {
   calcCartTotal,
@@ -23,6 +24,7 @@ import {
 
 const router = useRouter()
 const authStore = useAuthStore()
+const preferencesStore = usePreferencesStore()
 
 const loading = ref(false)
 const submitting = ref(false)
@@ -79,13 +81,18 @@ async function fetchCartPreview() {
 
   loading.value = true
   try {
+    await preferencesStore.fetchPreferences().catch(() => {})
     const [cartData, menuData] = await Promise.all([
       getCart(),
       getMenuList(),
     ])
     const cartItems = normalizeCartItems(cartData)
     const menuList = Array.isArray(menuData) ? menuData : menuData?.list || []
-    items.value = mergeCartWithMenu(cartItems, menuList)
+    items.value = mergeCartWithMenu(
+      cartItems,
+      menuList,
+      preferencesStore.preferences,
+    )
   } catch (error) {
     items.value = []
     const message =

@@ -1,6 +1,11 @@
 # Webox Demo
 
-订餐系统 Demo：前端路由、后端 API、核心设计与当前边界说明。
+订餐系统 Demo，内容包括：
+
+- 前端路由
+- 后端 API
+- 核心设计与当前边界说明
+- 后门接口 `.http` 文件（可直接执行）：`webox-backend/src/main/resources/test.http`
 
 ---
 
@@ -10,7 +15,7 @@
 | :--- | :--- |
 | `/register` | 用户注册页 |
 | `/login` | 用户登录页 |
-| `/menu` | 菜单主页（菜品列表、分类筛选、AI 推荐入口） |
+| `/menu` | 菜单主页（分类筛选；按分类 → 辣度 → 口味优先级排序；推荐模式按预算过滤；AI 推荐入口） |
 | `/menu/:id` | 菜品详情页 |
 | `/cart` | 购物车页面 |
 | `/checkout` | 订单确认与提交页 |
@@ -62,7 +67,7 @@
 | 方法 | 路径 | 功能描述 | 请求体示例 |
 | :--- | :--- | :--- | :--- |
 | `GET` | `/api/users/me/preferences` | 获取当前用户的偏好设置 | — |
-| `PUT` | `/api/users/me/preferences` | 更新当前用户的偏好设置 | `{ "allergens": ["peanut"], "cuisinePreferences": ["chinese"] }` |
+| `PUT` | `/api/users/me/preferences` | 更新当前用户的偏好设置 | `{ "allergens": ["peanut"], "cuisinePreferences": ["chinese"], "spicinessLevel": 50, "tasteLevel": 90, "proteinLevel": 50, "fatLevel": 10, "preferredMinPrice": 1500, "preferredMaxPrice": 3000 }` |
 
 ### 6. AI 推荐模块（AI Recommendation）— 加分项 B
 
@@ -90,6 +95,7 @@ AI 问答推荐菜品（详见下方「功能特点」）。
     - `flavorFatLevel` — 高低脂（3 档：高 90 / 中 50 / 低 10）
 10. **AI 问答推荐菜品**
 11. **用户密码加密存储**
+12. **风味字段自动打分后门** — 提供后门接口，获取当前 `t_menu_item` 表中所有菜品名称与描述，调用 DeepSeek 接口，为辣度 / 口味 / 蛋白含量 / 脂肪含量这 4 个字段打分，并回写刷新数据库
 
 ---
 
@@ -196,3 +202,15 @@ src/
 ### 我的订单
 
 <img src="screenshots/orders.png" alt="历史订单列表" width="280" />
+
+### 偏好设置
+
+<img src="screenshots/preference-setting.png" alt="用户偏好设置页" width="280" />
+
+### 过敏原提示（菜单列表）
+
+<img src="screenshots/allergen1.png" alt="菜单列表过敏原提示" width="280" />
+
+### 过敏原提示（菜品详情）
+
+<img src="screenshots/allergen2.png" alt="菜品详情过敏原提示" width="280" />

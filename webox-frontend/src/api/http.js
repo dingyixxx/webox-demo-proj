@@ -36,6 +36,13 @@ async function handleUnauthorized(message) {
       // pinia 尚未就绪时忽略
     }
 
+    try {
+      const { usePreferencesStore } = await import('@/stores/preferences')
+      usePreferencesStore().clearPreferences()
+    } catch {
+      // ignore
+    }
+
     showToast(message || '登录已过期，请重新登录')
 
     if (!window.location.pathname.startsWith('/login')) {

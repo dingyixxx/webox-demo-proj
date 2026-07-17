@@ -1,6 +1,5 @@
 package com.example.weboxbackend.controller;
 
-
 import com.example.weboxbackend.dto.Result;
 import com.example.weboxbackend.service.BackdoorService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +19,12 @@ public class BackdoorController {
     @PostMapping("/sync-daily-menu")
     public Result<Void> syncDailyMenu() {
         backdoorService.syncDailyMenu();
+        return Result.success();
+    }
+
+    @PostMapping("/analyze-menu-scores")
+    public Result<Void> analyzeMenuScores() {
+        backdoorService.analyzeAndScoreMenuItems();
         return Result.success();
     }
 }

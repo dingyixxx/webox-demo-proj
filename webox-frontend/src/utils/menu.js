@@ -24,6 +24,7 @@ const ALLERGEN_LABEL_MAP = {
   egg: '鸡蛋',
   fish: '鱼类',
   shellfish: '甲壳类',
+  seafood: '海鲜',
   gluten: '麸质',
   soy: '大豆',
 }

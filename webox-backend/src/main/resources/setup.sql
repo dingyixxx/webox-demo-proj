@@ -13,6 +13,8 @@ CREATE TABLE `t_user` (
                           `flavor_taste_level` INT DEFAULT 0 COMMENT '口味（重口90, 适中50, 清淡10）',
                           `flavor_protein_level` INT DEFAULT 0 COMMENT '蛋白含量（高90, 中50, 低10）',
                           `flavor_fat_level` INT DEFAULT 0 COMMENT '脂肪含量（高90, 中50, 低10）',
+                          `preferred_min_price` INT DEFAULT 0 COMMENT '偏好起始价格（分）',
+                          `preferred_max_price` INT DEFAULT 0 COMMENT '偏好终止价格（分）',
                           `is_deleted` INT DEFAULT 0 COMMENT '逻辑删除 0-未删除 1-已删除',
                           `created_by` VARCHAR(64) COMMENT '创建人',
                           `updated_by` VARCHAR(64) COMMENT '更新人',

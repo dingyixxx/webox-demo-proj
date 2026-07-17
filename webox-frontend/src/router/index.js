@@ -61,6 +61,12 @@ const router = createRouter({
       component: () => import('@/views/OrderDetailView.vue'),
       meta: { title: '订单详情' },
     },
+    {
+      path: '/preferences',
+      name: 'preferences',
+      component: () => import('@/views/PreferencesView.vue'),
+      meta: { title: '偏好设置' },
+    },
   ],
 })
 

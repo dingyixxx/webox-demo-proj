@@ -1,4 +1,5 @@
 import { getDishId } from '@/utils/menu'
+import { sortDishesByFlavorPreference } from '@/utils/preferences'
 
 /** 兼容数组或 { items: [] } */
 export function normalizeCartItems(data) {
@@ -17,16 +18,17 @@ export function getCartLineId(item) {
 }
 
 /**
- * 用当日菜单补齐购物车行的名称 / 图片 / 当日价格
+ * 用当日菜单补齐购物车行的名称 / 图片 / 当日价格 / 风味字段
+ * @param {object} [prefs] 传入时按辣度 → 口味贴近度排序
  */
-export function mergeCartWithMenu(cartItems, menuList) {
+export function mergeCartWithMenu(cartItems, menuList, prefs) {
   const menuMap = new Map()
   ;(menuList || []).forEach((dish) => {
     const id = String(getDishId(dish))
     if (id) menuMap.set(id, dish)
   })
 
-  return (cartItems || []).map((item) => {
+  const merged = (cartItems || []).map((item) => {
     const menuId = getCartItemMenuId(item)
     const dish = menuMap.get(String(menuId)) || {}
     const price =
@@ -42,9 +44,14 @@ export function mergeCartWithMenu(cartItems, menuList) {
       name: item.name || dish.name || '未知菜品',
       image: item.image || dish.image || '',
       category: item.category || dish.category || '',
+      flavorSpicinessLevel:
+        item.flavorSpicinessLevel ?? dish.flavorSpicinessLevel,
+      flavorTasteLevel: item.flavorTasteLevel ?? dish.flavorTasteLevel,
       lineAmount: price * quantity,
     }
   })
+
+  return prefs ? sortDishesByFlavorPreference(merged, prefs) : merged
 }
 
 export function calcCartTotal(items) {
